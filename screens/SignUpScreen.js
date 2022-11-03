@@ -15,12 +15,14 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import axios from 'axios'
 
 const SignInScreen = ({navigation}) => {
 
     const [data, setData] = React.useState({
         username: '',
         password: '',
+        email: '',
         confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
@@ -71,6 +73,24 @@ const SignInScreen = ({navigation}) => {
         });
     }
 
+    const handleEmailChange = (val) => {
+        setData({
+            ...data,
+            email: val
+        })
+    }
+
+    const handleRegister = () => {
+        axios.post('http://localhost:3000/api/auth/register',data)
+        .then(function (response) {
+            //console.log(response)
+            navigation.goBack()
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
     return (
       <View style={styles.container}>
           <StatusBar backgroundColor='#009387' barStyle="light-content"/>
@@ -100,13 +120,41 @@ const SignInScreen = ({navigation}) => {
                     animation="bounceIn"
                 >
                     <Feather 
+                        name="check-circle"     
+                        color="green"
+                        size={20}
+                    />
+                </Animatable.View>
+                : null}
+            </View> 
+
+            <Text style={[styles.text_footer, {
+                marginTop: 35
+            }]}>Email</Text>
+            <View style={styles.action}>
+                <FontAwesome 
+                    name="user-o"
+                    color="#05375a"
+                    size={20}
+                />
+                <TextInput 
+                    placeholder="Email"
+                    style={styles.textInput}
+                    autoCapitalize="none"
+                    onChangeText={(val) => handleEmailChange(val)}
+                />
+                {data.check_textInputChange ? 
+                <Animatable.View
+                    animation="bounceIn"
+                >
+                    <Feather 
                         name="check-circle"
                         color="green"
                         size={20}
                     />
                 </Animatable.View>
                 : null}
-            </View>
+            </View> 
 
             <Text style={[styles.text_footer, {
                 marginTop: 35
@@ -187,8 +235,8 @@ const SignInScreen = ({navigation}) => {
             </View>
             <View style={styles.button}>
                 <TouchableOpacity
+                    onPress={() => handleRegister()}
                     style={styles.signIn}
-                    onPress={() => {}}
                 >
                 <LinearGradient
                     colors={['#08d4c4', '#01ab9d']}

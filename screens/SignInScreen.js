@@ -93,7 +93,7 @@ const SignInScreen = ({navigation}) => {
 //   How to restart mobile
     const loginHandle = (userName, password) => {
 
-        axios.post('https://3d6e-96-9-67-84.ap.ngrok.io/api/auth/login',{username: userName, password} )
+        axios.post('http://localhost:3000/api/auth/login',{username: userName, password} )
           .then(function (response) {
              signIn(response.data);
           })
